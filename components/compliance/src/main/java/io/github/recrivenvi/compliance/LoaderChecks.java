@@ -117,7 +117,7 @@ final class LoaderChecks {
                             .anyMatch(name -> file.startsWith("components/" + name + "/")))
                 continue;
             byte[] bytes = repository.bytes(file);
-            if (TextChecks.binary(bytes)) continue;
+            if (repository.binary(file, bytes)) continue;
             List<String> lines = new String(bytes, StandardCharsets.UTF_8).lines().toList();
             for (int i = 0; i < lines.size(); i++)
                 if (TEMPLATE_NAME.matcher(lines.get(i)).find()) {

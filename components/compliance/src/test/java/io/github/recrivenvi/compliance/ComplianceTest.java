@@ -565,6 +565,19 @@ class ComplianceTest {
     }
 
     @Test
+    void gitBinaryAttributesSkipTextRules() throws IOException, InterruptedException {
+        assumeTrue(git("init", "-q") == 0, "git is not available");
+        compliant();
+        component("archive_format");
+        Path noise = root.resolve("components/archive_format/data/noise.raw");
+        Files.createDirectories(noise.getParent());
+        Files.write(noise, new byte[] {(byte) 0xff, (byte) 0xfd, (byte) 0xfb, ' ', '\n'});
+        assertEquals(Set.of("C-01"), rules());
+        files.put(".gitattributes", "* text=auto eol=lf\n*.raw binary\n");
+        assertEquals(List.of(), run(Map.of()));
+    }
+
+    @Test
     void trackedIgnoredFilesAreReported() throws IOException, InterruptedException {
         assumeTrue(git("init", "-q") == 0, "git is not available");
         compliant();

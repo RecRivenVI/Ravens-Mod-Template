@@ -101,7 +101,7 @@ plugins {
 rootProject.name = "runtime_safety"
 ```
 
-该插件让组件使用仓库的 `gradle/libs.versions.toml` 与 Maven Central，并为组件根项目应用 `base` 与 Spotless：Kotlin DSL 用 ktfmt，常见文本、脚本、C/C++、Rust 与着色器源码做空白处理，应用 `java` 时 Java 用 google-java-format 并把 `--release` 默认设为各 Target 中最低的 Java 版本，测试使用 JUnit Platform。`build/`、`third_party/` 与 `node_modules/` 不参与格式化。
+该插件让组件使用仓库的 `gradle/libs.versions.toml` 与 Maven Central，并为组件根项目应用 `base` 与 Spotless：Kotlin DSL 用 ktfmt，常见文本、脚本、C/C++、Rust 与着色器源码做空白处理，应用 `java` 时 Java 用 google-java-format 并把 `--release` 默认设为各 Target 中最低的 Java 版本，测试使用 JUnit Platform。`build/`、`third_party/`、`node_modules/` 与 `dist/` 不参与格式化。
 
 组件的构建内容写在它自己的 `build.gradle.kts` 中。不是 Java 写的工具，用 `Exec` 等任务调用自己的工具链，并让 `check` 依赖这些任务，例如运行 PowerShell 或 Python 测试、调用 clang-format 或 rustfmt 检查格式。工具优先选择跨平台的写法；只能在 Windows 上运行的工具在组件的说明文档中写明，项目的 `.github/workflows/check.yml` 相应使用 Windows 运行环境。
 
