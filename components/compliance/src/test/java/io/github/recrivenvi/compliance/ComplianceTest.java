@@ -768,6 +768,36 @@ class ComplianceTest {
     }
 
     @Test
+    void templateNamesStayInTemplateFiles() throws IOException, InterruptedException {
+        compliant();
+        files.put("NOTICE", "本项目的模板组件来自 Raven's Mod Template。\n");
+        files.put("licenses/ravens_mod_template-mit.txt", "MIT License\n");
+        files.put(
+                "documents/release/changelog-example.md",
+                "# 更新日志\n\n适用于 26.2。\n\n## [未发布]\n\n### 新增\n\n- 输出 Raven's Mod Template loaded。\n");
+        int readmeLine = files.get("README.md").split("\n", -1).length + 1;
+        files.put(
+                "README.md",
+                files.get("README.md") + "\nPackage io.github.recrivenvi.ModTemplate.\n");
+        assertEquals(
+                List.of("README.md:" + readmeLine, "documents/release/changelog-example.md:9"),
+                run(Map.of()).stream()
+                        .filter(finding -> finding.rule() == Rule.P07)
+                        .map(finding -> finding.path() + ":" + finding.line())
+                        .sorted()
+                        .toList());
+        assumeTrue(git("init", "-q") == 0);
+        assumeTrue(
+                git(
+                                "remote",
+                                "add",
+                                "origin",
+                                "https://github.com/RecRivenVI/Ravens-Mod-Template.git")
+                        == 0);
+        assertTrue(run(Map.of()).stream().noneMatch(finding -> finding.rule() == Rule.P07));
+    }
+
+    @Test
     void validationInstanceIgnoreRuleIsRequired() throws IOException {
         compliant();
         files.put(".gitignore", "/local.toml\n.gradle/\nbuild/\n/instances/**\n!/instances/**/\n");

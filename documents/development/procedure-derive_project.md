@@ -36,13 +36,7 @@
 
 ## 验收
 
-- `.\gradlew.bat check` 成功，`.\gradlew.bat verifyCompliance` 的输出中没有 P-06。
-- 下面的命令没有输出；它排除了按规定保留模板名称的模板文件、`NOTICE` 与 `licenses/`：
-
-  ```powershell
-  git grep -il -e ravens_mod_template -e modtemplate -e "Raven's Mod Template" -- . ":(exclude)AGENTS.md" ":(exclude)CLAUDE.md" ":(exclude).rumdl.toml" ":(exclude).github/workflows/specification.yml" ":(exclude)components/configuration" ":(exclude)components/conventions" ":(exclude)components/compliance" ":(exclude)NOTICE" ":(exclude)licenses"
-  ```
-
+- `.\gradlew.bat check` 成功，`.\gradlew.bat verifyCompliance` 的输出中没有 P-06 与 P-07。
 - `instances/<reference>/client/logs/latest.log` 中出现新模组的初始化输出。
 
 ## 禁止

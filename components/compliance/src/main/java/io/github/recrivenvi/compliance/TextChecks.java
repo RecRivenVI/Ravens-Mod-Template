@@ -80,7 +80,7 @@ final class TextChecks {
                             "在 Git 中把 gradlew 标记为可执行：git add --chmod=+x gradlew"));
     }
 
-    private static boolean binary(byte[] bytes) {
+    static boolean binary(byte[] bytes) {
         for (int i = 0; i < Math.min(bytes.length, 8192); i++) if (bytes[i] == 0) return true;
         return false;
     }
