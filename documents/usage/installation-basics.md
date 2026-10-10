@@ -11,9 +11,9 @@ Raven's Mod Template 在游戏启动时写入一行日志 `Raven's Mod Template 
 | 游戏版本 | 加载器 | 文件 |
 | --- | --- | --- |
 | 1.20.1 | Forge 47.4.26 或更高 | `ravens_mod_template-1.20.1-forge-1.0.0.jar` |
-| 1.21.1 | NeoForge 21.1.256 或更高 | `ravens_mod_template-1.21.1-neoforge-1.0.0.jar` |
-| 26.1.2 | NeoForge 26.1.2.114 或更高 | `ravens_mod_template-26.1.2-neoforge-1.0.0.jar` |
-| 26.3 | NeoForge 26.3.0.58-beta 或更高 | `ravens_mod_template-26.3-neoforge-1.0.0.jar` |
+| 1.21.1 | NeoForge 21.1.257 或更高 | `ravens_mod_template-1.21.1-neoforge-1.0.0.jar` |
+| 26.1.2 | NeoForge 26.1.2.115 或更高 | `ravens_mod_template-26.1.2-neoforge-1.0.0.jar` |
+| 26.3 | NeoForge 26.3.0.64-beta 或更高 | `ravens_mod_template-26.3-neoforge-1.0.0.jar` |
 | 26.3 | Fabric Loader 0.19.5 或更高 | `ravens_mod_template-26.3-fabric-1.0.0.jar` |
 
 ## 安装步骤

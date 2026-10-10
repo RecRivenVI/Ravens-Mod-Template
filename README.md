@@ -11,9 +11,9 @@ Raven's Mod Template loaded
 | Target | 加载器版本 | Java |
 | --- | --- | --- |
 | `1.20.1-forge` | Forge 47.4.26 | 17 |
-| `1.21.1-neoforge` | NeoForge 21.1.256 | 21 |
-| `26.1.2-neoforge` | NeoForge 26.1.2.114 | 25 |
-| `26.3-neoforge` | NeoForge 26.3.0.58-beta | 25 |
+| `1.21.1-neoforge` | NeoForge 21.1.257 | 21 |
+| `26.1.2-neoforge` | NeoForge 26.1.2.115 | 25 |
+| `26.3-neoforge` | NeoForge 26.3.0.64-beta | 25 |
 | `26.3-fabric` | Fabric Loader 0.19.5 | 25 |
 
 ## 快速开始

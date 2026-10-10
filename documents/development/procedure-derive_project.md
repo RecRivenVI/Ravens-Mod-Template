@@ -15,7 +15,7 @@
 
 ## 前置条件
 
-- 仓库是 Git 仓库，`git remote get-url origin` 指向新项目自己的仓库。仓库直接克隆自模板仓库时，先请使用者创建自己的仓库并改写 `origin`；否则 P-06 不会提示遗漏的改名。
+- 仓库是 Git 仓库，`git remote get-url origin` 不指向模板仓库；否则 P-06 与 P-07 不会提示遗漏的改名。仓库直接克隆自模板仓库时，把 `origin` 改为新项目自己的仓库；还没有自己的仓库时执行 `git remote remove origin`，推送前再添加。
 
 ## 步骤
 
