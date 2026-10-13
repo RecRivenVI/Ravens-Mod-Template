@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.spotless)
 }
 
-val modules = listOf("configuration", "target", "component", "compliance")
+val modules = listOf("configuration", "platform", "component", "compliance")
 
 // 子项目中的 libs 指向子项目自己的扩展，所以先取出根项目的版本目录。
 val catalog = libs

@@ -1,6 +1,6 @@
 # 构建架构
 
-构建由模板插件 `gradle/conventions/` 组织。它是一个包含构建，模块 `configuration` 负责事实与配置，`target` 负责 Target、组件登记、日常实例与验证运行，`component` 为项目组件提供公共设置，`compliance` 负责合规规则；`specification/` 是本规范的附件，不是 Gradle 模块。Target 的构建脚本只声明加载器插件与该 Target 独有的原生配置，项目组件只声明自己的构建内容，其余配置由插件统一提供。
+构建由模板插件 `gradle/conventions/` 组织。它是一个包含构建，模块 `configuration` 负责事实与配置，`platform` 负责每个 Target 的构建、组件登记、日常实例、验证运行与发行核对，`component` 为项目组件提供公共设置，`compliance` 负责合规规则；`specification/` 是本规范的附件，不是 Gradle 模块。Target 的构建脚本只声明加载器插件与该 Target 独有的原生配置，项目组件只声明自己的构建内容，其余配置由插件统一提供。
 
 ## 组成
 
@@ -9,15 +9,15 @@
 | 模块 | 对外插件 | 职责 |
 | --- | --- | --- |
 | `configuration` | 无 | 提供 `targets {}` 登记；读取并校验项目事实、Target 事实、日常实例配置与每项验证的 `[instances]`，算出每个日常实例与验证实例的启动参数；在构建的 Gradle 对象上注册扩展 `repositoryConfiguration`，在根项目注册任务 `verifyConfiguration`、`printLaunchSettings` 与 `verifyInputs` |
-| `target` | `io.github.recrivenvi.conventions` | 插件入口：依次应用 `configuration` 的设置插件、foojay 工具链解析插件与 `compliance` 的设置插件；提供 `components {}` 登记；为根项目应用 `RootConventions`，为每个 Target 应用 `TargetConventions` |
+| `platform` | `io.github.recrivenvi.conventions` | 插件入口：依次应用 `configuration` 的设置插件、foojay 工具链解析插件与 `compliance` 的设置插件；提供 `components {}` 登记；为根项目应用 `RootConventions`，为每个 Target 应用 `TargetConventions` |
 | `component` | `io.github.recrivenvi.conventions.component` | 项目组件在自己的 `settings.gradle.kts` 中应用，见下文"项目组件"；只依赖 Spotless，因此组件不会带上 Minecraft 构建插件，也不必声明它们所在的 Maven 仓库 |
 | `compliance` | 无 | 提供 `compliance {}` 设置；注册 `verifyCompliance` 与 `printVocabulary`；AGENTS.md 每一节由一个检查类实现，见 [mechanism-compliance](mechanism-compliance.md) |
 
-模板插件是模板文件（G-08），项目不修改。它是一个普通的 Gradle 多项目构建，可以用 `.\gradlew.bat -p gradle/conventions check` 单独构建并运行全部测试。插件入口放在 `target` 模块中，因为入口要应用另外两个模块的插件，而 `target` 本来就依赖 `configuration`；放在 `configuration` 中会形成循环依赖。
+模板插件是模板文件（G-08），项目不修改。它是一个普通的 Gradle 多项目构建，可以用 `.\gradlew.bat -p gradle/conventions check` 单独构建并运行全部测试。插件入口放在 `platform` 模块中，因为入口要应用另外两个模块的插件，而 `platform` 本来就依赖 `configuration`；放在 `configuration` 中会形成循环依赖。
 
 ## 插件类路径
 
-ModDevGradle（下称 MDG）、Loom 与 Spotless 是 `target` 模块的依赖，因此位于设置阶段的类路径上。Target 脚本按 ID 应用它们而不写版本；版本只在 [libs.versions.toml](../../../libs.versions.toml) 中定义：Spotless 等与 Minecraft 无关的工具由模板定义（F-06），MDG 与 Loom 的版本由项目按 [procedure-update_dependencies](../development/procedure-update_dependencies.md) 升级。反过来，Target 脚本不能再为这些插件指定版本（T-02）。`configuration` 与 `compliance` 用 tomlj 解析 TOML 文件，它同样是模板插件的依赖，不进入任何模组。
+ModDevGradle（下称 MDG）、Loom 与 Spotless 是 `platform` 模块的依赖，因此位于设置阶段的类路径上。Target 脚本按 ID 应用它们而不写版本；版本只在 [libs.versions.toml](../../../libs.versions.toml) 中定义：Spotless 等与 Minecraft 无关的工具由模板定义（F-06），MDG 与 Loom 的版本由项目按 [procedure-update_dependencies](../development/procedure-update_dependencies.md) 升级。反过来，Target 脚本不能再为这些插件指定版本（T-02）。`configuration` 与 `compliance` 用 tomlj 解析 TOML 文件，它同样是模板插件的依赖，不进入任何模组。
 
 Loom 1.18 以 Java 25 编译，因此 Gradle 守护进程必须运行在 JDK 25 上，由 [gradle-daemon-jvm.properties](../../../gradle-daemon-jvm.properties) 保证。
 
