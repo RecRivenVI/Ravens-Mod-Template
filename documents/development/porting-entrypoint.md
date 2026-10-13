@@ -21,4 +21,4 @@
 | `26.1.2-neoforge`、`26.3-neoforge` | `META-INF/neoforge.mods.toml` | 不写 `modLoader` 与 `loaderVersion`；依赖用 `type = "required"` |
 | `26.3-fabric` | `fabric.mod.json` | 依赖写在 `depends` 中；`environment` 决定运行端 |
 
-版本要求与模组身份都用占位符从 `gradle.properties`、`target.properties` 与 Target 名称取值，字段对应见 [format-metadata](../reference/format-metadata.md)。
+版本要求与模组身份都用占位符从 `gradle.properties`、`target.properties` 与 Target 名称取值，字段对应见 [format-metadata](../../gradle/conventions/specification/reference/format-metadata.md)。
