@@ -1,6 +1,5 @@
 package io.github.recrivenvi.conventions.platform;
 
-import com.diffplug.gradle.spotless.FormatExtension;
 import com.diffplug.gradle.spotless.SpotlessExtension;
 import io.github.recrivenvi.conventions.component.ComponentConventions;
 import java.io.File;
@@ -28,12 +27,14 @@ final class Formatting {
         spotless.java(
                 java -> {
                     java.target("src/*/java/**/*.java", "src/*/templates/**/*.java");
-                    java.googleJavaFormat(version(project, "google-java-format")).aosp();
+                    java.googleJavaFormat(
+                                    ComponentConventions.version(project, "google-java-format"))
+                            .aosp();
                 });
         spotless.kotlinGradle(
                 kotlin -> {
                     kotlin.target("*.gradle.kts");
-                    kotlin.ktfmt(version(project, "ktfmt")).kotlinlangStyle();
+                    kotlin.ktfmt(ComponentConventions.version(project, "ktfmt")).kotlinlangStyle();
                 });
         spotless.json(
                 json -> {
@@ -48,7 +49,7 @@ final class Formatting {
                     for (String extension : ComponentConventions.TEXT_EXTENSIONS)
                         if (!extension.equals("json")) files.add("src/**/*." + extension);
                     misc.target(files.toArray());
-                    whitespace(misc);
+                    ComponentConventions.whitespace(misc);
                 });
     }
 
@@ -57,7 +58,7 @@ final class Formatting {
         spotless.kotlinGradle(
                 kotlin -> {
                     kotlin.target("*.gradle.kts");
-                    kotlin.ktfmt(version(project, "ktfmt")).kotlinlangStyle();
+                    kotlin.ktfmt(ComponentConventions.version(project, "ktfmt")).kotlinlangStyle();
                 });
         spotless.format(
                 "misc",
@@ -80,6 +81,7 @@ final class Formatting {
                                             ".gitignore",
                                             "gradle/*.toml",
                                             ".github/**/*.yml",
+                                            ".github/**/*.yaml",
                                             ".github/**/*.md",
                                             "documents/**/*.md"));
                     for (String extension : ComponentConventions.TEXT_EXTENSIONS)
@@ -87,7 +89,7 @@ final class Formatting {
                     misc.target(files.toArray());
                     misc.targetExclude(
                             "local.toml", "validations/*/instance/**", "validations/*/result/**");
-                    whitespace(misc);
+                    ComponentConventions.whitespace(misc);
                 });
         TaskProvider<Sync> rumdl = installRumdl(project);
         TaskProvider<Exec> fix =
@@ -99,10 +101,6 @@ final class Formatting {
         project.getTasks()
                 .matching(task -> task.getName().equals("spotlessMiscApply"))
                 .configureEach(task -> task.mustRunAfter(fix));
-    }
-
-    private static void whitespace(FormatExtension format) {
-        ComponentConventions.whitespace(format);
     }
 
     // rumdl 是发布在 GitHub Releases 上的原生程序。Gradle 把发布包当作依赖解析，
@@ -131,7 +129,8 @@ final class Formatting {
                                     project.getDependencies()
                                             .create(
                                                     "rvben:rumdl:"
-                                                            + version(project, "rumdl")
+                                                            + ComponentConventions.version(
+                                                                    project, "rumdl")
                                                             + ":"
                                                             + platform
                                                             + "@"
@@ -220,9 +219,5 @@ final class Formatting {
 
     private static boolean windows() {
         return System.getProperty("os.name").toLowerCase(Locale.ROOT).startsWith("windows");
-    }
-
-    private static String version(Project project, String alias) {
-        return ComponentConventions.version(project, alias);
     }
 }

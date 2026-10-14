@@ -2,15 +2,13 @@ package io.github.recrivenvi.conventions.platform;
 
 import io.github.recrivenvi.conventions.compliance.CompliancePlugin;
 import io.github.recrivenvi.conventions.configuration.ConfigurationPlugin;
+import io.github.recrivenvi.conventions.configuration.Instance;
+import io.github.recrivenvi.conventions.configuration.RepositoryConfiguration;
 import org.gradle.api.Plugin;
 import org.gradle.api.initialization.Settings;
 
-// 模板对外只有这一个设置插件：依次启用配置、Target 约定与合规检查。
+// 仓库根目录只应用这一个设置插件：依次启用配置、Target 约定与合规检查。
 public abstract class ConventionsPlugin implements Plugin<Settings> {
-    // compliance 插件读取这两个属性，核对组件已登记（L-08）与每项验证写明的工具（V-08）。
-    public static final String PRODUCTS_PROPERTY = "io.github.recrivenvi.products";
-    public static final String TOOLS_PROPERTY = "io.github.recrivenvi.tools";
-
     @Override
     public void apply(Settings settings) {
         settings.getPluginManager().apply(ConfigurationPlugin.class);
@@ -23,12 +21,18 @@ public abstract class ConventionsPlugin implements Plugin<Settings> {
         settings.getGradle()
                 .rootProject(
                         root -> {
-                            root.getExtensions()
-                                    .getExtraProperties()
-                                    .set(PRODUCTS_PROPERTY, components.products());
-                            root.getExtensions()
-                                    .getExtraProperties()
-                                    .set(TOOLS_PROPERTY, components.tools());
+                            // 合规检查不依赖另外两个模块，实例与组件的名单由这里交给它。
+                            RepositoryConfiguration repository =
+                                    root.getGradle()
+                                            .getExtensions()
+                                            .getByType(RepositoryConfiguration.class);
+                            var properties = root.getExtensions().getExtraProperties();
+                            properties.set(
+                                    CompliancePlugin.INSTANCES_PROPERTY,
+                                    repository.instances().stream().map(Instance::id).toList());
+                            properties.set(
+                                    CompliancePlugin.PRODUCTS_PROPERTY, components.products());
+                            properties.set(CompliancePlugin.TOOLS_PROPERTY, components.tools());
                             root.getPluginManager().apply(RootConventions.class);
                         });
         settings.getGradle()
